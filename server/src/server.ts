@@ -22,9 +22,19 @@ app.get('/shows', async (request, reply) => {
   showsRequests.inc();
   const city = (request.query as any).city || process.env.TARGET_CITY || 'NYC';
   const date = (request.query as any).date || new Date().toISOString().slice(0, 10);
+  const source = (request.query as any).source || process.env.SCRAPE_SOURCE || 'fixtures';
   const cacheKey = `shows:${city}:${date}`;
   const cached = globalCache.get<Show[]>(cacheKey);
   if (cached) return cached;
+  if (source === 'live') {
+    try {
+      const mod = await import('./scrapers/chainX/playwright_shows.js');
+      const live = await mod.scrapeShowsLive(city, date);
+      return live as Show[];
+    } catch (err) {
+      request.log.warn({ err }, 'live shows scrape failed, falling back to fixtures');
+    }
+  }
   const file = path.join(process.cwd(), 'fixtures', 'shows.json');
   const raw = await readFile(file, 'utf8');
   const data: any[] = JSON.parse(raw);
@@ -45,9 +55,28 @@ function validateSeatMap(seatmap: SeatMap) {
 
 app.get('/shows/:id/seatmap', async (request, reply) => {
   const id = (request.params as any).id as string;
+  const source = (request.query as any).source || process.env.SCRAPE_SOURCE || 'fixtures';
   const cacheKey = `seatmap:${id}`;
   const fresh = globalCache.get<SeatMap>(cacheKey);
   if (fresh) { seatmapRequests.inc(); return fresh; }
+  if (source === 'live') {
+    try {
+      const showsFile = path.join(process.cwd(), 'fixtures', 'shows.json');
+      const showsRaw = await readFile(showsFile, 'utf8');
+      const shows: any[] = JSON.parse(showsRaw);
+      const show = shows.find(s => s.id === id);
+      if (show?.upstream?.url) {
+        const mod = await import('./scrapers/chainX/playwright_seatmap.js');
+        const live = await mod.fetchSeatMapLive(show.upstream.url);
+        validateSeatMap(live as any);
+        globalCache.set(cacheKey, live, 60 * 1000);
+        seatmapRequests.inc();
+        return live as SeatMap;
+      }
+    } catch (err) {
+      request.log.warn({ err }, 'live seatmap scrape failed, falling back to fixtures');
+    }
+  }
   const file = path.join(process.cwd(), 'fixtures', `seatmap_${id}.json`);
   const raw = await readFile(file, 'utf8');
   const seatmap = JSON.parse(raw) as SeatMap;
