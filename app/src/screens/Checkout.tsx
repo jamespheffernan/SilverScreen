@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, ActivityIndicator } from 'react-native';
 import { checkout, confirm, getOrder } from '../api/client';
 
+// Note: For MVP slice, we rely on server-created PaymentIntent and mock confirm; CardField integration can follow.
+
 type Props = {
   show: any;
   seats: string[];
@@ -20,6 +22,7 @@ export function CheckoutScreen({ show, seats, onBack, onConfirmed }: Props) {
     try {
       const resp = await checkout({ showId: show.id, seats, email });
       setQuote({ amount: resp.amount, currency: resp.currency });
+      // In test mode without CardField, we directly confirm on server
       await confirm(resp.orderId);
       const ord = await getOrder(resp.orderId);
       onConfirmed(ord);
