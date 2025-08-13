@@ -95,8 +95,8 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 - [ ] 5) Scraper shows + cache
 - [x] 6) API seatmap with fixture
 - [x] 7) RN Seat Map + selection
-- [ ] 8) Payments checkout (server + RN)
-- [ ] 9) Confirm enqueue + worker scaffold
+- [~] 8) Payments checkout (server + RN) — PaymentIntent mocked/optional; RN flow without Stripe UI
+- [~] 9) Confirm enqueue + worker scaffold — BullMQ worker enqueues and marks purchased (mock)
 - [ ] 10) Purchase automation (happy path)
 - [ ] 11) Webhooks, E2E, telemetry
 
@@ -104,14 +104,14 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 - Local git repo initialized; feature branch `mvp-collaborative-movie-booking` created.
 - Scaffolding done: `app/`, `server/`, `infra/`, `.gitignore`, `README.md` committed.
 - API implemented with fixtures: `GET /shows`, `GET /shows/:id/seatmap` (with validation). Tests are green.
-- RN app implemented: Browse screen, Seat Map screen with selection and live total.
-- Checkout flow (mocked): server endpoints `/checkout`, `/confirm`, `/orders/:id`; RN Checkout and Confirmation screens wired. Stripe integration not yet added. Task 8 is partially complete (server-side total calc stubbed to fixtures, no Stripe client confirm).
-- Next (Executor): Implement Stripe integration in server `/checkout` (PaymentIntent) and RN (Stripe RN SDK), or proceed to enqueue/purchase worker scaffold per Task 9. Open draft PR once remote configured.
+- RN app implemented: Browse → Seat Map selection → Checkout → Confirmation. Confirmation polls order state.
+- Checkout flow: server `/checkout` integrates Stripe PaymentIntent when key present, otherwise mock clientSecret; `/confirm` enqueues BullMQ `purchase` job (mock worker marks purchased); `/orders/:id` returns state.
+- Next (Executor): Decide between Stripe RN SDK integration for test-mode card UI (Task 8) or starting Playwright purchase automation scaffolding (Task 10). Also open draft PR once remote is configured.
 
 ## Executor's Feedback or Assistance Requests
 - Provide GitHub remote URL (or allow `gh repo create`) to push branch and open a draft PR.
-- Confirm target chain and city for real scraping so we can prepare fixtures accordingly.
-- Preference: proceed with Stripe test-mode integration next (Task 8) before worker (Task 9)?
+- Confirm target chain and city for real scraping so we can prepare fixtures and Playwright flows.
+- Preference: proceed with Stripe RN SDK integration next? Or prioritize Playwright worker scaffold?
 
 ## Lessons Learned
 - TBA
