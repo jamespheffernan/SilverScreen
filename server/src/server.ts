@@ -12,6 +12,12 @@ app.get('/metrics', async (req, reply) => {
   return register.metrics();
 });
 
+// Propagate request id for debugging
+app.addHook('onRequest', async (request, reply) => {
+  // Fastify assigns request.id; expose it so clients can echo in bug reports
+  reply.header('x-request-id', request.id);
+});
+
 app.get('/shows', async (request, reply) => {
   showsRequests.inc();
   const city = (request.query as any).city || process.env.TARGET_CITY || 'NYC';
