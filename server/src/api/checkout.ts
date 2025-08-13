@@ -1,8 +1,11 @@
 import type { FastifyInstance } from 'fastify';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import Stripe from 'stripe';
 import type { Show } from '../types';
 import { createOrder, updateOrder, getOrder } from '../orders';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_000', { apiVersion: '2024-06-20' });
 
 export default async function routes(app: FastifyInstance) {
   app.post('/checkout', async (request, reply) => {
@@ -23,11 +26,18 @@ export default async function routes(app: FastifyInstance) {
       amount,
       currency: show.pricing.adult.currency,
       email: orderDraft.email,
-      state: 'paid',
+      state: 'initiated',
     });
 
-    const clientSecret = `pi_${order.id}_secret`;
-    return { clientSecret, orderId: order.id, amount, currency: show.pricing.adult.currency };
+    const pi = await stripe.paymentIntents.create({
+      amount,
+      currency: show.pricing.adult.currency.toLowerCase(),
+      automatic_payment_methods: { enabled: true },
+      metadata: { orderId: order.id },
+    });
+    updateOrder(order.id, { state: 'paid', paymentIntentId: pi.id });
+
+    return { clientSecret: pi.client_secret, orderId: order.id, amount, currency: show.pricing.adult.currency };
   });
 
   app.post('/confirm', async (request, reply) => {
