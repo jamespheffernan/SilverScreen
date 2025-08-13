@@ -6,9 +6,10 @@ import { SeatGrid } from '../components/SeatGrid';
 type Props = {
   show: any;
   onBack: () => void;
+  onProceed?: (seats: string[]) => void;
 };
 
-export function SeatMapScreen({ show, onBack }: Props) {
+export function SeatMapScreen({ show, onBack, onProceed }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [seatmap, setSeatmap] = useState<any | null>(null);
@@ -52,6 +53,11 @@ export function SeatMapScreen({ show, onBack }: Props) {
       <View style={{ padding: 16, borderTopWidth: 1, borderTopColor: '#eee' }}>
         <Text>Selected: {Array.from(selected).join(', ') || '—'}</Text>
         <Text>Total: {(total / 100).toFixed(2)}</Text>
+        {onProceed ? (
+          <Pressable disabled={selected.size===0} onPress={() => onProceed(Array.from(selected))} style={{ backgroundColor: selected.size===0?'#aaa':'#111', padding:12, borderRadius:8, marginTop: 12 }}>
+            <Text style={{ color:'#fff', textAlign:'center' }}>Continue</Text>
+          </Pressable>
+        ) : null}
       </View>
     </View>
   );
