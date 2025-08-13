@@ -8,7 +8,7 @@
     "allowJs": true,
     "noEmit": true,
     "resolveJsonModule": true,
-    "types": ["react", "react-native"]
+    "skipLibCheck": true
   },
   "include": ["src", "index.js"]
 }
