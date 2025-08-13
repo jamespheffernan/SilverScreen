@@ -2,10 +2,17 @@ import Fastify from 'fastify';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { Show, SeatMap } from './types';
+import { register, showsRequests, seatmapRequests } from './metrics.js';
 
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'info' } });
 
+app.get('/metrics', async (req, reply) => {
+  reply.header('Content-Type', register.contentType);
+  return register.metrics();
+});
+
 app.get('/shows', async (request, reply) => {
+  showsRequests.inc();
   const city = (request.query as any).city || process.env.TARGET_CITY || 'NYC';
   const date = (request.query as any).date || new Date().toISOString().slice(0, 10);
   const file = path.join(process.cwd(), 'fixtures', 'shows.json');
@@ -31,6 +38,7 @@ app.get('/shows/:id/seatmap', async (request, reply) => {
   const raw = await readFile(file, 'utf8');
   const seatmap = JSON.parse(raw) as SeatMap;
   validateSeatMap(seatmap);
+  seatmapRequests.inc();
   return seatmap;
 });
 

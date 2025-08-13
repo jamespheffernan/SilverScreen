@@ -5,6 +5,7 @@ import Stripe from 'stripe';
 import type { Show } from '../types';
 import { createOrder, updateOrder, getOrder } from '../orders';
 import { enqueuePurchase } from '../jobs/purchase';
+import { checkoutRequests, confirmRequests } from '../metrics.js';
 
 const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_000';
 const stripe = new Stripe(stripeKey, { apiVersion: '2024-06-20' });
@@ -12,6 +13,7 @@ const useStripe = !!process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_K
 
 export default async function routes(app: FastifyInstance) {
   app.post('/checkout', async (request, reply) => {
+    checkoutRequests.inc();
     const { orderDraft } = request.body as any;
     const showsRaw = await readFile(path.join(process.cwd(), 'fixtures', 'shows.json'), 'utf8');
     const shows: any[] = JSON.parse(showsRaw);
@@ -51,6 +53,7 @@ export default async function routes(app: FastifyInstance) {
   });
 
   app.post('/confirm', async (request, reply) => {
+    confirmRequests.inc();
     const { orderId } = request.body as any;
     const order = getOrder(orderId);
     if (!order) return reply.code(404).send({ error: 'Order not found' });
