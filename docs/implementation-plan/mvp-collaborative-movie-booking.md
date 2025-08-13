@@ -88,7 +88,7 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 - `POSTGRES_URL`, `REDIS_URL`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `TARGET_CHAIN`, `TARGET_CITY`, `SCRAPER_USER_AGENT`.
 
 ## Project Status Board
-- [ ] 1) Create feature branch and draft PR
+- [x] 1) Create feature branch and draft PR (branch created; PR pending remote)
 - [ ] 2) Scaffold repo structure (`app/`, `server/`, `infra/`, docs)
 - [ ] 3) API `/shows` with fixture
 - [ ] 4) RN Browse screen
@@ -101,12 +101,13 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 - [ ] 11) Webhooks, E2E, telemetry
 
 ## Current Status / Progress Tracking
-- Planner initialized plan and skeleton docs. No branch created yet.
+- Local git repo initialized; feature branch `mvp-collaborative-movie-booking` created.
+- Draft PR: pending remote setup. Once remote is configured, open as draft via GitHub CLI.
+- Next (Executor): Task 2 - scaffold repo (`app/`, `server/`, `infra/`, docs) and commit.
 
 ## Executor's Feedback or Assistance Requests
-- Need decision on target chain and city to wire initial fixtures and URLs.
-- Confirm hosting/runtime choices for early demos (local only vs. cloud).
-- Confirm whether demo mode should be default for the first PR preview.
+- Provide GitHub remote URL (or run `gh repo create` flow) to push branch and open PR.
+- Confirm target chain and city for fixtures.
 
 ## Lessons Learned
 - TBA
