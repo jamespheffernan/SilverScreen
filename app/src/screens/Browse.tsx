@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator, Pressable } from 'react-native';
 import { getShows } from '../api/client';
 
-export function Browse() {
+type Props = { onSelect: (show: any) => void };
+
+export function Browse({ onSelect }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [shows, setShows] = useState<any[]>([]);
@@ -26,7 +28,7 @@ export function Browse() {
       contentContainerStyle={{ padding: 16 }}
       ListEmptyComponent={<Text>No shows.</Text>}
       renderItem={({ item }) => (
-        <Pressable style={{ padding: 12, borderWidth: 1, borderColor: '#ddd', borderRadius: 8, marginBottom: 12 }}>
+        <Pressable onPress={() => onSelect(item)} style={{ padding: 12, borderWidth: 1, borderColor: '#ddd', borderRadius: 8, marginBottom: 12 }}>
           <Text style={{ fontWeight: '600' }}>{item.movie}</Text>
           <Text>{new Date(item.startAt).toLocaleString()}</Text>
         </Pressable>
