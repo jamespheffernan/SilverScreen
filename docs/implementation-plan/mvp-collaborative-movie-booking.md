@@ -88,30 +88,32 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 - `POSTGRES_URL`, `REDIS_URL`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `TARGET_CHAIN`, `TARGET_CITY`, `SCRAPER_USER_AGENT`.
 
 ## Project Status Board
-- [x] 1) Create feature branch and draft PR (branch created; PR pending remote)
+- [x] 1) Create feature branch and draft PR (branch created; PR open as draft)
 - [x] 2) Scaffold repo structure (`app/`, `server/`, `infra/`, docs)
 - [x] 3) API `/shows` with fixture
 - [x] 4) RN Browse screen
-- [ ] 5) Scraper shows + cache
+- [~] 5) Scraper shows + cache (fixture + Playwright skeletons)
 - [x] 6) API seatmap with fixture
 - [x] 7) RN Seat Map + selection
-- [~] 8) Payments checkout (server + RN) — PaymentIntent mocked/optional; RN flow without Stripe UI
-- [~] 9) Confirm enqueue + worker scaffold — BullMQ worker enqueues and marks purchased (mock)
-- [ ] 10) Purchase automation (happy path)
-- [ ] 11) Webhooks, E2E, telemetry
+- [~] 8) Payments checkout (server + RN) — PaymentIntent optional; RN CardField optional; mock path supported
+- [~] 9) Confirm enqueue + worker scaffold — BullMQ enqueues; purchase mocked via fixtures
+- [~] 10) Purchase automation (happy path) — fixture-based performPurchase; Playwright seatmap capture skeleton
+- [~] 11) Webhooks, E2E, telemetry — Stripe webhook route; E2E test (demo mode); metrics + /metrics; basic caching
 
 ## Current Status / Progress Tracking
-- Local git repo initialized; feature branch `mvp-collaborative-movie-booking` created.
-- Scaffolding done: `app/`, `server/`, `infra/`, `.gitignore`, `README.md` committed.
-- API implemented with fixtures: `GET /shows`, `GET /shows/:id/seatmap` (with validation). Tests are green.
-- RN app implemented: Browse → Seat Map selection → Checkout → Confirmation. Confirmation polls order state.
-- Checkout flow: server `/checkout` integrates Stripe PaymentIntent when key present, otherwise mock clientSecret; `/confirm` enqueues BullMQ `purchase` job (mock worker marks purchased); `/orders/:id` returns state.
-- Next (Executor): Decide between Stripe RN SDK integration for test-mode card UI (Task 8) or starting Playwright purchase automation scaffolding (Task 10). Also open draft PR once remote is configured.
+- Feature branch active and draft PR open: `mvp-collaborative-movie-booking` → main.
+- API implemented with fixtures; optional live scraping via `?source=live` with Playwright skeleton and fixture fallback.
+- RN app: Browse → Seat Map → Checkout (CardField optional) → Confirmation (polling). 
+- Payments: server `/checkout` uses Stripe when key set, else mock; `/confirm` enqueues worker or short-circuits in demo mode; `/orders/:id` reports status; `/webhooks/stripe` added.
+- Worker: BullMQ queue + worker, `performPurchase` uses fixtures; ready to swap in Playwright purchase later.
+- Observability: Prometheus `/metrics` + counters; x-request-id header; simple in-memory cache (15m shows / 60s seatmap).
+- CI: GitHub Actions job runs server tests in demo mode.
+- Next (Executor): Harden Playwright flows (timeouts/retries), add Prisma schema + Postgres wiring for persistence, then add app-side error toasts and basic telemetry in RN.
 
 ## Executor's Feedback or Assistance Requests
-- Provide GitHub remote URL (or allow `gh repo create`) to push branch and open a draft PR.
-- Confirm target chain and city for real scraping so we can prepare fixtures and Playwright flows.
-- Preference: proceed with Stripe RN SDK integration next? Or prioritize Playwright worker scaffold?
+- Confirm target chain + city for real scraping to develop proper selectors and legal compliance checks.
+- Provide Stripe test publishable/secret keys if we should validate live CardField flow.
+- Confirm priority: DB persistence vs. Playwright hardening next.
 
 ## Lessons Learned
 - TBA
