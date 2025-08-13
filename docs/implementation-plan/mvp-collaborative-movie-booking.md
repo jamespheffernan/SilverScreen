@@ -90,11 +90,11 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 ## Project Status Board
 - [x] 1) Create feature branch and draft PR (branch created; PR pending remote)
 - [x] 2) Scaffold repo structure (`app/`, `server/`, `infra/`, docs)
-- [ ] 3) API `/shows` with fixture
-- [ ] 4) RN Browse screen
+- [x] 3) API `/shows` with fixture
+- [x] 4) RN Browse screen
 - [ ] 5) Scraper shows + cache
-- [ ] 6) API seatmap with fixture
-- [ ] 7) RN Seat Map + selection
+- [x] 6) API seatmap with fixture
+- [x] 7) RN Seat Map + selection
 - [ ] 8) Payments checkout (server + RN)
 - [ ] 9) Confirm enqueue + worker scaffold
 - [ ] 10) Purchase automation (happy path)
@@ -103,12 +103,15 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 ## Current Status / Progress Tracking
 - Local git repo initialized; feature branch `mvp-collaborative-movie-booking` created.
 - Scaffolding done: `app/`, `server/`, `infra/`, `.gitignore`, `README.md` committed.
-- Draft PR: pending remote setup. Once remote is configured, open as draft via GitHub CLI.
-- Next (Executor): Task 3 - API `/shows` with fixture and unit test.
+- API implemented with fixtures: `GET /shows`, `GET /shows/:id/seatmap` (with validation). Tests are green.
+- RN app implemented: Browse screen, Seat Map screen with selection and live total.
+- Checkout flow (mocked): server endpoints `/checkout`, `/confirm`, `/orders/:id`; RN Checkout and Confirmation screens wired. Stripe integration not yet added. Task 8 is partially complete (server-side total calc stubbed to fixtures, no Stripe client confirm).
+- Next (Executor): Implement Stripe integration in server `/checkout` (PaymentIntent) and RN (Stripe RN SDK), or proceed to enqueue/purchase worker scaffold per Task 9. Open draft PR once remote configured.
 
 ## Executor's Feedback or Assistance Requests
-- Provide GitHub remote URL (or run `gh repo create` flow) to push branch and open PR.
-- Confirm target chain and city for fixtures.
+- Provide GitHub remote URL (or allow `gh repo create`) to push branch and open a draft PR.
+- Confirm target chain and city for real scraping so we can prepare fixtures accordingly.
+- Preference: proceed with Stripe test-mode integration next (Task 8) before worker (Task 9)?
 
 ## Lessons Learned
 - TBA
