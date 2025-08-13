@@ -6,6 +6,7 @@ import type { Show } from '../types';
 import { createOrder, updateOrder, getOrder } from '../orders';
 import { enqueuePurchase } from '../jobs/purchase';
 import { checkoutRequests, confirmRequests } from '../metrics.js';
+import { getPrisma } from '../db/client.js';
 
 const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_000';
 const stripe = new Stripe(stripeKey, { apiVersion: '2024-06-20' });
@@ -33,6 +34,26 @@ export default async function routes(app: FastifyInstance) {
       email: orderDraft.email,
       state: 'initiated',
     });
+
+    // Persist to DB if available (best-effort)
+    const prisma = getPrisma();
+    if (prisma) {
+      try {
+        await prisma.order.create({ data: {
+          id: order.id,
+          showId: order.showId,
+          seats: order.seats.join(','),
+          amount: order.amount,
+          currency: order.currency,
+          email: order.email,
+          state: order.state,
+          paymentIntentId: order.paymentIntentId ?? null,
+          externalOrderId: order.confirmation?.externalOrderId ?? null,
+        }});
+      } catch (err) {
+        app.log.warn({ err }, 'failed to persist order');
+      }
+    }
 
     let clientSecret: string | null = null;
     if (useStripe) {
