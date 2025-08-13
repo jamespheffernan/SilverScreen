@@ -4,9 +4,10 @@ import path from 'node:path';
 import Stripe from 'stripe';
 import type { Show } from '../types';
 import { createOrder, updateOrder, getOrder } from '../orders';
+import { enqueuePurchase } from '../jobs/purchase';
 
 const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_000';
-const stripe = new Stripe(stripeKey);
+const stripe = new Stripe(stripeKey, { apiVersion: '2024-06-20' });
 const useStripe = !!process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY !== 'sk_test_000';
 
 export default async function routes(app: FastifyInstance) {
@@ -42,7 +43,6 @@ export default async function routes(app: FastifyInstance) {
       updateOrder(order.id, { state: 'paid', paymentIntentId: pi.id });
       clientSecret = pi.client_secret as string;
     } else {
-      // Mock path for tests/dev without real Stripe key
       updateOrder(order.id, { state: 'paid', paymentIntentId: `pi_${order.id}` });
       clientSecret = `pi_${order.id}_secret_mock`;
     }
@@ -54,7 +54,14 @@ export default async function routes(app: FastifyInstance) {
     const { orderId } = request.body as any;
     const order = getOrder(orderId);
     if (!order) return reply.code(404).send({ error: 'Order not found' });
-    updateOrder(orderId, { state: 'purchased', confirmation: { externalOrderId: `ext_${orderId}` } });
+
+    const demoMode = process.env.DEMO_MODE === 'true' || !process.env.REDIS_URL;
+    if (demoMode) {
+      updateOrder(orderId, { state: 'purchased', confirmation: { externalOrderId: `ext_${orderId}` } });
+      return { status: 'purchased' };
+    }
+
+    await enqueuePurchase(orderId, { attempts: 1 });
     return { status: 'queued' };
   });
 
