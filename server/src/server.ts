@@ -4,6 +4,7 @@ import path from 'node:path';
 import type { Show, SeatMap } from './types';
 import { register, showsRequests, seatmapRequests } from './metrics.js';
 import { globalCache } from './lib/cache.js';
+import { getPrisma } from './db/client.js';
 
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'info' } });
 
@@ -39,6 +40,32 @@ app.get('/shows', async (request, reply) => {
   const raw = await readFile(file, 'utf8');
   const data: any[] = JSON.parse(raw);
   const filtered = data.filter((s) => s.city === city && (s.startAt ?? '').startsWith(date)) as Show[];
+  // Best-effort persistence if DB configured
+  const prisma = getPrisma();
+  if (prisma) {
+    try {
+      for (const s of filtered) {
+        await prisma.show.upsert({
+          where: { id: s.id },
+          create: {
+            id: s.id,
+            venueId: (s as any).venueId,
+            movie: s.movie,
+            startAt: new Date(s.startAt),
+            currency: (s.pricing as any)?.adult?.currency || 'USD',
+          },
+          update: {
+            venueId: (s as any).venueId,
+            movie: s.movie,
+            startAt: new Date(s.startAt),
+            currency: (s.pricing as any)?.adult?.currency || 'USD',
+          }
+        });
+      }
+    } catch (err) {
+      request.log.warn({ err }, 'failed to persist shows');
+    }
+  }
   globalCache.set(cacheKey, filtered, 15 * 60 * 1000);
   return filtered;
 });
