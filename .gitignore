@@ -1,0 +1,10 @@
+node_modules
+.DS_Store
+.env
+.expo
+.expo-shared
+.dist
+build
+dist
+coverage
+
