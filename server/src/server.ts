@@ -1,4 +1,6 @@
 import Fastify from 'fastify';
+import dotenv from 'dotenv';
+import cors from '@fastify/cors';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import type { Show, SeatMap } from './types';
@@ -6,7 +8,9 @@ import { register, showsRequests, seatmapRequests } from './metrics.js';
 import { globalCache } from './lib/cache.js';
 import { getPrisma } from './db/client.js';
 
+dotenv.config();
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'info' } });
+await app.register(cors, { origin: true });
 
 app.get('/metrics', async (req, reply) => {
   reply.header('Content-Type', register.contentType);
