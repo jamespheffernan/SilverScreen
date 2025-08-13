@@ -5,7 +5,9 @@ import Stripe from 'stripe';
 import type { Show } from '../types';
 import { createOrder, updateOrder, getOrder } from '../orders';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_000', { apiVersion: '2024-06-20' });
+const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_000';
+const stripe = new Stripe(stripeKey, { apiVersion: '2024-06-20' });
+const useStripe = !!process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY !== 'sk_test_000';
 
 export default async function routes(app: FastifyInstance) {
   app.post('/checkout', async (request, reply) => {
@@ -29,15 +31,23 @@ export default async function routes(app: FastifyInstance) {
       state: 'initiated',
     });
 
-    const pi = await stripe.paymentIntents.create({
-      amount,
-      currency: show.pricing.adult.currency.toLowerCase(),
-      automatic_payment_methods: { enabled: true },
-      metadata: { orderId: order.id },
-    });
-    updateOrder(order.id, { state: 'paid', paymentIntentId: pi.id });
+    let clientSecret: string | null = null;
+    if (useStripe) {
+      const pi = await stripe.paymentIntents.create({
+        amount,
+        currency: show.pricing.adult.currency.toLowerCase(),
+        automatic_payment_methods: { enabled: true },
+        metadata: { orderId: order.id },
+      });
+      updateOrder(order.id, { state: 'paid', paymentIntentId: pi.id });
+      clientSecret = pi.client_secret as string;
+    } else {
+      // Mock path for tests/dev without real Stripe key
+      updateOrder(order.id, { state: 'paid', paymentIntentId: `pi_${order.id}` });
+      clientSecret = `pi_${order.id}_secret_mock`;
+    }
 
-    return { clientSecret: pi.client_secret, orderId: order.id, amount, currency: show.pricing.adult.currency };
+    return { clientSecret, orderId: order.id, amount, currency: show.pricing.adult.currency };
   });
 
   app.post('/confirm', async (request, reply) => {
