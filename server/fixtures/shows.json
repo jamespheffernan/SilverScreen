@@ -1,0 +1,20 @@
+[
+  {
+    "id": "show_1",
+    "venueId": "venue_1",
+    "movie": "Example Film",
+    "startAt": "2025-08-14T19:30:00.000Z",
+    "pricing": { "adult": { "currency": "USD", "amount": 1500 } },
+    "upstream": { "url": "https://example-chain.com/nyc/show/1", "externalId": "1" },
+    "city": "NYC"
+  },
+  {
+    "id": "show_2",
+    "venueId": "venue_1",
+    "movie": "Other Film",
+    "startAt": "2025-08-15T20:00:00.000Z",
+    "pricing": { "adult": { "currency": "USD", "amount": 1800 } },
+    "upstream": { "url": "https://example-chain.com/nyc/show/2", "externalId": "2" },
+    "city": "NYC"
+  }
+]

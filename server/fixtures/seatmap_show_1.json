@@ -1,0 +1,16 @@
+{
+  "showId": "show_1",
+  "rows": 3,
+  "cols": 5,
+  "updatedAt": "2025-08-14T00:00:00.000Z",
+  "seats": [
+    { "row": "A", "col": 1, "status": "free", "price": { "currency": "USD", "amount": 1500 }, "code": "A-1" },
+    { "row": "A", "col": 2, "status": "sold", "price": { "currency": "USD", "amount": 1500 }, "code": "A-2" },
+    { "row": "A", "col": 3, "status": "free", "price": { "currency": "USD", "amount": 1500 }, "code": "A-3" },
+    { "row": "B", "col": 1, "status": "free", "price": { "currency": "USD", "amount": 1500 }, "code": "B-1" },
+    { "row": "B", "col": 2, "status": "free", "price": { "currency": "USD", "amount": 1500 }, "code": "B-2" },
+    { "row": "B", "col": 3, "status": "free", "price": { "currency": "USD", "amount": 1500 }, "code": "B-3" },
+    { "row": "C", "col": 2, "status": "free", "price": { "currency": "USD", "amount": 1500 }, "code": "C-2" },
+    { "row": "C", "col": 3, "status": "sold", "price": { "currency": "USD", "amount": 1500 }, "code": "C-3" }
+  ]
+}

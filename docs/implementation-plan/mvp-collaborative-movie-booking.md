@@ -88,25 +88,32 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 - `POSTGRES_URL`, `REDIS_URL`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `TARGET_CHAIN`, `TARGET_CITY`, `SCRAPER_USER_AGENT`.
 
 ## Project Status Board
-- [ ] 1) Create feature branch and draft PR
-- [ ] 2) Scaffold repo structure (`app/`, `server/`, `infra/`, docs)
-- [ ] 3) API `/shows` with fixture
-- [ ] 4) RN Browse screen
-- [ ] 5) Scraper shows + cache
-- [ ] 6) API seatmap with fixture
-- [ ] 7) RN Seat Map + selection
-- [ ] 8) Payments checkout (server + RN)
-- [ ] 9) Confirm enqueue + worker scaffold
-- [ ] 10) Purchase automation (happy path)
-- [ ] 11) Webhooks, E2E, telemetry
+- [x] 1) Create feature branch and draft PR (branch created; PR open as draft)
+- [x] 2) Scaffold repo structure (`app/`, `server/`, `infra/`, docs)
+- [x] 3) API `/shows` with fixture
+- [x] 4) RN Browse screen
+- [~] 5) Scraper shows + cache (fixture + Playwright skeletons)
+- [x] 6) API seatmap with fixture
+- [x] 7) RN Seat Map + selection
+- [~] 8) Payments checkout (server + RN) — PaymentIntent optional; RN CardField optional; mock path supported
+- [~] 9) Confirm enqueue + worker scaffold — BullMQ enqueues; purchase mocked via fixtures
+- [~] 10) Purchase automation (happy path) — fixture-based performPurchase; Playwright seatmap capture skeleton
+- [~] 11) Webhooks, E2E, telemetry — Stripe webhook route; E2E test (demo mode); metrics + /metrics; basic caching
 
 ## Current Status / Progress Tracking
-- Planner initialized plan and skeleton docs. No branch created yet.
+- Feature branch active and draft PR open: `mvp-collaborative-movie-booking` → main.
+- API implemented with fixtures; optional live scraping via `?source=live` with Playwright skeleton and fixture fallback.
+- RN app: Browse → Seat Map → Checkout (CardField optional) → Confirmation (polling). 
+- Payments: server `/checkout` uses Stripe when key set, else mock; `/confirm` enqueues worker or short-circuits in demo mode; `/orders/:id` reports status; `/webhooks/stripe` added.
+- Worker: BullMQ queue + worker, `performPurchase` uses fixtures; ready to swap in Playwright purchase later.
+- Observability: Prometheus `/metrics` + counters; x-request-id header; simple in-memory cache (15m shows / 60s seatmap).
+- CI: GitHub Actions job runs server tests in demo mode.
+- Next (Executor): Harden Playwright flows (timeouts/retries), add Prisma schema + Postgres wiring for persistence, then add app-side error toasts and basic telemetry in RN.
 
 ## Executor's Feedback or Assistance Requests
-- Need decision on target chain and city to wire initial fixtures and URLs.
-- Confirm hosting/runtime choices for early demos (local only vs. cloud).
-- Confirm whether demo mode should be default for the first PR preview.
+- Confirm target chain + city for real scraping to develop proper selectors and legal compliance checks.
+- Provide Stripe test publishable/secret keys if we should validate live CardField flow.
+- Confirm priority: DB persistence vs. Playwright hardening next.
 
 ## Lessons Learned
 - TBA
