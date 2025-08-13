@@ -89,7 +89,7 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 
 ## Project Status Board
 - [x] 1) Create feature branch and draft PR (branch created; PR pending remote)
-- [ ] 2) Scaffold repo structure (`app/`, `server/`, `infra/`, docs)
+- [x] 2) Scaffold repo structure (`app/`, `server/`, `infra/`, docs)
 - [ ] 3) API `/shows` with fixture
 - [ ] 4) RN Browse screen
 - [ ] 5) Scraper shows + cache
@@ -102,8 +102,9 @@ Note: Execute one step at a time in Executor mode; do not proceed until success 
 
 ## Current Status / Progress Tracking
 - Local git repo initialized; feature branch `mvp-collaborative-movie-booking` created.
+- Scaffolding done: `app/`, `server/`, `infra/`, `.gitignore`, `README.md` committed.
 - Draft PR: pending remote setup. Once remote is configured, open as draft via GitHub CLI.
-- Next (Executor): Task 2 - scaffold repo (`app/`, `server/`, `infra/`, docs) and commit.
+- Next (Executor): Task 3 - API `/shows` with fixture and unit test.
 
 ## Executor's Feedback or Assistance Requests
 - Provide GitHub remote URL (or run `gh repo create` flow) to push branch and open PR.
