@@ -34,6 +34,10 @@ app.get('/shows/:id/seatmap', async (request, reply) => {
   return seatmap;
 });
 
+
+import checkoutRoutes from './api/checkout.js';
+await checkoutRoutes(app as any);
+
 export async function start() {
   const port = Number(process.env.PORT || 3001);
   await app.listen({ port, host: '0.0.0.0' });
