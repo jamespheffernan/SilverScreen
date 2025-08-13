@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model Show {
+  id        String   @id
+  venueId   String
+  movie     String
+  startAt   DateTime
+  currency  String
+}
+
+model Order {
+  id                String  @id
+  showId            String
+  seats             String
+  amount            Int
+  currency          String
+  email             String
+  state             String
+  paymentIntentId   String?
+  externalOrderId   String?
+  createdAt         DateTime @default(now())
+}
