@@ -10,7 +10,12 @@ import { getPrisma } from './db/client.js';
 
 dotenv.config();
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'info' } });
-await app.register(cors, { origin: true });
+// Configure CORS - permissive for development, can be restricted for production
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:8080'];
+await app.register(cors, { 
+  origin: process.env.NODE_ENV === 'production' ? allowedOrigins : true,
+  credentials: true 
+});
 
 app.get('/metrics', async (req, reply) => {
   reply.header('Content-Type', register.contentType);
