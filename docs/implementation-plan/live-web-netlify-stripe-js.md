@@ -49,10 +49,10 @@ We have a functional MVP (mobile-first) with a server API. To make a web-accessi
 - Success: Document test run and checklist.
 
 ## Project Status Board
-- [ ] 1) Branch + draft PR
-- [ ] 2) stripe-js web checkout path
-- [ ] 3) Expo Web build config + netlify.toml
-- [ ] 4) CORS restrictions & Netlify env
+- [x] 1) Branch + draft PR
+- [x] 2) stripe-js web checkout path
+- [x] 3) Expo Web build config + netlify.toml
+- [x] 4) CORS restrictions & Netlify env
 - [ ] 5) Netlify deploy (preview + prod)
 - [ ] 6) E2E validation (demo-mode and Stripe test mode)
 
@@ -77,3 +77,39 @@ We have a functional MVP (mobile-first) with a server API. To make a web-accessi
 ## Rollout
 - Preview: Deploy draft PR; sanity check
 - Production: Merge to main; Netlify production deploy; run a supervised test booking (test mode)
+
+## Executor's Feedback or Assistance Requests
+
+### Current Status: Ready for Netlify Setup
+**Date**: 2024-09-03
+
+**Completed Tasks:**
+- ✅ Expo Web build configuration with `netlify.toml` 
+- ✅ CORS configuration with environment variable support
+- ✅ Environment variable examples for both app and server
+- ✅ Local web build tested and working
+- ✅ Branch pushed to GitHub: `feat/web-netlify-stripe-js`
+
+**Next Steps Required (Manual Setup):**
+1. **Connect GitHub to Netlify:**
+   - Go to [Netlify](https://app.netlify.com)
+   - Click "New site from Git"
+   - Connect GitHub and select `jamespheffernan/SilverScreen`
+   - Choose branch: `feat/web-netlify-stripe-js` (for preview) or `main` (for production)
+
+2. **Configure Build Settings:**
+   - Build command: `npx expo export --platform web` (should auto-detect from netlify.toml)
+   - Publish directory: `dist` (should auto-detect from netlify.toml)
+   - Base directory: `app` (should auto-detect from netlify.toml)
+
+3. **Set Environment Variables in Netlify:**
+   ```
+   EXPO_PUBLIC_API_BASE_URL=https://your-server-url.com
+   EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_key
+   ```
+
+4. **Update Server CORS (when Netlify URL is known):**
+   - Add Netlify URL to `ALLOWED_ORIGINS` environment variable on server
+   - Example: `ALLOWED_ORIGINS=https://your-app.netlify.app,https://your-domain.com`
+
+**Ready for Manual Netlify Setup** - Please set up the Netlify site and provide the URL for final testing.
