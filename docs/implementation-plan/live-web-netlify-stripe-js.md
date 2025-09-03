@@ -53,7 +53,7 @@ We have a functional MVP (mobile-first) with a server API. To make a web-accessi
 - [x] 2) stripe-js web checkout path
 - [x] 3) Expo Web build config + netlify.toml
 - [x] 4) CORS restrictions & Netlify env
-- [ ] 5) Netlify deploy (preview + prod)
+- [x] 5) Netlify deploy (preview + prod)
 - [ ] 6) E2E validation (demo-mode and Stripe test mode)
 
 ## Environment & Secrets
