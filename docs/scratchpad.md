@@ -45,7 +45,10 @@
 - See `docs/implementation-plan/mvp-collaborative-movie-booking.md` for detailed plan, tasks, and status board.
 
 ### Lessons Learned
-- [YYYY-MM-DD] …
+- [2024-12-28] When refactoring React components with external libraries like Stripe, always check for duplicate imports and ensure all imports are at the top of the file
+- [2024-12-28] TypeScript files can become malformed during incomplete edits or merge conflicts - look for misplaced imports and orphaned closing braces
+- [2024-12-28] When merging feature branches with diverged histories, carefully review each conflict and keep the better implementation (e.g., platform detection for web vs native, API versioning for external services)
+- [2024-12-28] Successfully consolidated mvp-collaborative-movie-booking branch into main - all MVP features now unified in single branch
 
 ### Running Notes
 - Keep chain-specific logic isolated under `server/src/scrapers/chainX/*` for swapability.
