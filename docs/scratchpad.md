@@ -51,6 +51,7 @@
 - [2024-12-28] Successfully consolidated mvp-collaborative-movie-booking branch into main - all MVP features now unified in single branch
 - [2024-12-28] Stripe SDK v18.4.0 requires API version 2025-07-30.basil - TypeScript will enforce the correct API version at compile time
 - [2024-12-28] ES modules in Node.js require explicit .js extensions in import paths for relative imports - TypeScript compiles to .js files but doesn't add extensions automatically
+- [2024-12-28] Make external services like Redis optional for production - use graceful fallbacks to allow simpler deployments without full infrastructure
 
 ### Running Notes
 - Keep chain-specific logic isolated under `server/src/scrapers/chainX/*` for swapability.
