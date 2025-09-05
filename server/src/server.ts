@@ -3,14 +3,20 @@ import dotenv from 'dotenv';
 import cors from '@fastify/cors';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import type { Show, SeatMap } from './types';
+import type { Show, SeatMap } from './types.js';
 import { register, showsRequests, seatmapRequests } from './metrics.js';
 import { globalCache } from './lib/cache.js';
 import { getPrisma } from './db/client.js';
 
 dotenv.config();
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'info' } });
-await app.register(cors, { origin: true });
+// Configure CORS - permissive for development, can be restricted for production
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:8081'];
+// For MVP, allow all origins. In production, set ALLOWED_ORIGINS env var to restrict
+await app.register(cors, { 
+  origin: process.env.ALLOWED_ORIGINS ? allowedOrigins : true,
+  credentials: true 
+});
 
 app.get('/metrics', async (req, reply) => {
   reply.header('Content-Type', register.contentType);

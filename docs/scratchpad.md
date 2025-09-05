@@ -2,6 +2,7 @@
 
 ### References
 - Implementation detail: `docs/implementation-plan/mvp-collaborative-movie-booking.md`
+- Implementation detail: `docs/implementation-plan/fix-checkoutweb-duplicate-imports.md`
 - Source brief: `initial briefing for silverscreen app.rtf`
 
 ### Background and Motivation (from brief)
@@ -44,7 +45,13 @@
 - See `docs/implementation-plan/mvp-collaborative-movie-booking.md` for detailed plan, tasks, and status board.
 
 ### Lessons Learned
-- [YYYY-MM-DD] …
+- [2024-12-28] When refactoring React components with external libraries like Stripe, always check for duplicate imports and ensure all imports are at the top of the file
+- [2024-12-28] TypeScript files can become malformed during incomplete edits or merge conflicts - look for misplaced imports and orphaned closing braces
+- [2024-12-28] When merging feature branches with diverged histories, carefully review each conflict and keep the better implementation (e.g., platform detection for web vs native, API versioning for external services)
+- [2024-12-28] Successfully consolidated mvp-collaborative-movie-booking branch into main - all MVP features now unified in single branch
+- [2024-12-28] Stripe SDK v18.4.0 requires API version 2025-07-30.basil - TypeScript will enforce the correct API version at compile time
+- [2024-12-28] ES modules in Node.js require explicit .js extensions in import paths for relative imports - TypeScript compiles to .js files but doesn't add extensions automatically
+- [2024-12-28] Make external services like Redis optional for production - use graceful fallbacks to allow simpler deployments without full infrastructure
 
 ### Running Notes
 - Keep chain-specific logic isolated under `server/src/scrapers/chainX/*` for swapability.

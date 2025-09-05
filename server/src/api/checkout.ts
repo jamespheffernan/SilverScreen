@@ -2,14 +2,14 @@ import type { FastifyInstance } from 'fastify';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import Stripe from 'stripe';
-import type { Show } from '../types';
-import { createOrder, updateOrder, getOrder } from '../orders';
-import { enqueuePurchase } from '../jobs/purchase';
+import type { Show } from '../types.js';
+import { createOrder, updateOrder, getOrder } from '../orders.js';
+import { enqueuePurchase } from '../jobs/purchase.js';
 import { checkoutRequests, confirmRequests } from '../metrics.js';
 import { getPrisma } from '../db/client.js';
 
 const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_000';
-const stripe = new Stripe(stripeKey, { apiVersion: '2024-06-20' });
+const stripe = new Stripe(stripeKey, { apiVersion: '2025-07-30.basil' });
 const useStripe = !!process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY !== 'sk_test_000';
 
 export default async function routes(app: FastifyInstance) {
