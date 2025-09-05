@@ -96,3 +96,4 @@ export default async function routes(app: FastifyInstance) {
     return order;
   });
 }
+// Force rebuild - remove apiVersion
