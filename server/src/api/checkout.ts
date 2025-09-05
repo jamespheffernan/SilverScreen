@@ -2,9 +2,9 @@ import type { FastifyInstance } from 'fastify';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import Stripe from 'stripe';
-import type { Show } from '../types';
-import { createOrder, updateOrder, getOrder } from '../orders';
-import { enqueuePurchase } from '../jobs/purchase';
+import type { Show } from '../types.js';
+import { createOrder, updateOrder, getOrder } from '../orders.js';
+import { enqueuePurchase } from '../jobs/purchase.js';
 import { checkoutRequests, confirmRequests } from '../metrics.js';
 import { getPrisma } from '../db/client.js';
 

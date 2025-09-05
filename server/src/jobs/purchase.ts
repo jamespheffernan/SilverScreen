@@ -1,5 +1,5 @@
 import { Queue, Worker, QueueEvents, JobsOptions } from 'bullmq';
-import { getOrder, updateOrder } from '../orders';
+import { getOrder, updateOrder } from '../orders.js';
 
 const connection = { connection: { url: process.env.REDIS_URL || 'redis://localhost:6379' } } as any;
 

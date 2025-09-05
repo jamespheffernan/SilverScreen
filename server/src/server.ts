@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from '@fastify/cors';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import type { Show, SeatMap } from './types';
+import type { Show, SeatMap } from './types.js';
 import { register, showsRequests, seatmapRequests } from './metrics.js';
 import { globalCache } from './lib/cache.js';
 import { getPrisma } from './db/client.js';
