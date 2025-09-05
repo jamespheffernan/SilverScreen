@@ -9,7 +9,7 @@ import { checkoutRequests, confirmRequests } from '../metrics.js';
 import { getPrisma } from '../db/client.js';
 
 const stripeKey = process.env.STRIPE_SECRET_KEY || 'sk_test_000';
-const stripe = new Stripe(stripeKey, { apiVersion: '2024-06-20' });
+const stripe = new Stripe(stripeKey, { apiVersion: '2025-07-30.basil' });
 const useStripe = !!process.env.STRIPE_SECRET_KEY && process.env.STRIPE_SECRET_KEY !== 'sk_test_000';
 
 export default async function routes(app: FastifyInstance) {
