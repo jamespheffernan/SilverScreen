@@ -10,3 +10,4 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  EXPO_PUBLIC_API_BASE_URL = "https://silverscreen-1.onrender.com"

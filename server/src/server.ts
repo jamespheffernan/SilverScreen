@@ -11,9 +11,10 @@ import { getPrisma } from './db/client.js';
 dotenv.config();
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL || 'info' } });
 // Configure CORS - permissive for development, can be restricted for production
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:8080'];
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:8081'];
+// For MVP, allow all origins. In production, set ALLOWED_ORIGINS env var to restrict
 await app.register(cors, { 
-  origin: process.env.NODE_ENV === 'production' ? allowedOrigins : true,
+  origin: process.env.ALLOWED_ORIGINS ? allowedOrigins : true,
   credentials: true 
 });
 
