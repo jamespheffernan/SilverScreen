@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, ActivityIndicator } from 'react-native';
-import { Elements, CardElement, useStripe, useElements, loadStripe } from '@stripe/react-stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { checkout, confirm, getOrder } from '../api/client';
 import { Money } from '../components/Money';
 

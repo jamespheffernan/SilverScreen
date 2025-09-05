@@ -2,6 +2,7 @@
 
 ### References
 - Implementation detail: `docs/implementation-plan/mvp-collaborative-movie-booking.md`
+- Implementation detail: `docs/implementation-plan/fix-checkoutweb-duplicate-imports.md`
 - Source brief: `initial briefing for silverscreen app.rtf`
 
 ### Background and Motivation (from brief)

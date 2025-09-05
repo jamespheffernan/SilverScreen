@@ -10,5 +10,9 @@
     "resolveJsonModule": true,
     "skipLibCheck": true
   },
-  "include": ["src", "index.js"]
+  "include": [
+    "src",
+    "index.js"
+  ],
+  "extends": "expo/tsconfig.base"
 }
