@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@stripe/stripe-react-native": "^0.50.3",
-    "expo": "^51.0.0",
+    "expo": "^57.0.12",
     "expo-status-bar": "~1.12.1",
     "react": "^18.2.0",
     "react-native": "0.74.0"
